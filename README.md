@@ -4,6 +4,12 @@ A complete, professional, end-to-end machine learning web application that predi
 student's final exam score and performance category from academic and lifestyle
 indicators, built for a final-year academic project.
 
+## Live Demo
+
+Open the deployed app here:
+
+https://performance-prediction-production.up.railway.app
+
 ## Features
 
 - **Machine Learning pipeline**: synthetic dataset generator + RandomForestRegressor
