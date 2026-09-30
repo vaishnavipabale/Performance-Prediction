@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Model Dashboard — EduPredict AI{% endblock %}
+{% block content %}
+
+<section class="page-header">
+  <h1><i class="fa-solid fa-chart-line"></i> Model Performance Dashboard</h1>
+  <p>Transparency into how the AI model was trained and how well it performs.</p>
+</section>
+
+{% if metrics %}
+<section class="metrics-grid">
+  <div class="metric-card">
+    <div class="metric-icon icon-blue"><i class="fa-solid fa-bullseye"></i></div>
+    <span>{{ (metrics.r2_score * 100)|round(1) }}%</span>
+    <small>R&sup2; Score (Regression Fit)</small>
+  </div>
+  <div class="metric-card">
+    <div class="metric-icon icon-green"><i class="fa-solid fa-ruler"></i></div>
+    <span>&plusmn;{{ metrics.mae }}</span>
+    <small>Mean Absolute Error</small>
+  </div>
+  <div class="metric-card">
+    <div class="metric-icon icon-purple"><i class="fa-solid fa-square-root-variable"></i></div>
+    <span>{{ metrics.rmse }}</span>
+    <small>RMSE</small>
+  </div>
+  <div class="metric-card">
+    <div class="metric-icon icon-orange"><i class="fa-solid fa-layer-group"></i></div>
+    <span>{{ (metrics.classification_accuracy * 100)|round(1) }}%</span>
+    <small>Category Classification Accuracy</small>
+  </div>
+</section>
+
+<section class="dashboard-grid">
+  <div class="dash-card">
+    <h3><i class="fa-solid fa-star"></i> Feature Importance</h3>
+    <p class="dash-sub">Which factors influence the AI's prediction the most.</p>
+    <canvas id="importanceChart"></canvas>
+  </div>
+
+  <div class="dash-card">
+    <h3><i class="fa-solid fa-chart-column"></i> Score Distribution</h3>
+    <p class="dash-sub">Final exam scores across {{ chart_data.dataset_size }} training records.</p>
+    <canvas id="distributionChart"></canvas>
+  </div>
+
+  <div class="dash-card">
+    <h3><i class="fa-solid fa-chalkboard-user"></i> Tutoring Impact</h3>
+    <p class="dash-sub">Average score with vs. without private tutoring.</p>
+    <canvas id="tutoringChart"></canvas>
+  </div>
+
+  <div class="dash-card">
+    <h3><i class="fa-solid fa-table"></i> Classification Report</h3>
+    <p class="dash-sub">Precision / recall per performance category.</p>
+    <div class="table-wrap">
+      <table class="report-table">
+        <thead><tr><th>Category</th><th>Precision</th><th>Recall</th><th>F1-score</th></tr></thead>
+        <tbody>
+          {% for cat, vals in metrics.classification_report.items() %}
+            {% if cat not in ['accuracy','macro avg','weighted avg'] %}
+            <tr>
+              <td>{{ cat }}</td>
+              <td>{{ (vals.precision * 100)|round(1) }}%</td>
+              <td>{{ (vals.recall * 100)|round(1) }}%</td>
+              <td>{{ (vals['f1-score'] * 100)|round(1) }}%</td>
+            </tr>
+            {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<script>
+  const importanceLabels = {{ feature_importance.keys()|list | tojson }}.map(k => ({{ labels|tojson }})[k] || k);
+  const importanceValues = {{ feature_importance.values()|list | tojson }};
+  const distributionData = {{ chart_data.score_distribution | tojson }};
+  const tutoringData = {{ chart_data.avg_by_tutoring | tojson }};
+</script>
+{% else %}
+<section class="empty-state">
+  <i class="fa-solid fa-triangle-exclamation"></i>
+  <h2>No trained model found</h2>
+  <p>Run <code>python model/generate_dataset.py</code> then <code>python model/train_model.py</code> to generate metrics for this dashboard.</p>
+</section>
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

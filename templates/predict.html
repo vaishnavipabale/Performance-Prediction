@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block title %}Predict Performance — EduPredict AI{% endblock %}
+{% block content %}
+
+<section class="page-header">
+  <h1><i class="fa-solid fa-wand-magic-sparkles"></i> Predict Student Performance</h1>
+  <p>Fill in the student's profile below to generate an AI-based performance forecast.</p>
+</section>
+
+<section class="predict-section">
+  <div class="predict-grid">
+
+    <form class="predict-form" method="POST" action="{{ url_for('predict') }}">
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label><i class="fa-solid fa-clock"></i> Study Hours / Day</label>
+          <input type="number" step="0.1" min="0" max="12" name="study_hours_per_day" value="{{ result.inputs.study_hours_per_day if result and not result.error else 4 }}" required>
+        </div>
+
+        <div class="form-group">
+          <label><i class="fa-solid fa-user-check"></i> Attendance (%)</label>
+          <input type="number" step="0.1" min="0" max="100" name="attendance_percentage" value="{{ result.inputs.attendance_percentage if result and not result.error else 80 }}" required>
+        </div>
+
+        <div class="form-group">
+          <label><i class="fa-solid fa-file-lines"></i> Previous Exam Score</label>
+          <input type="number" step="0.1" min="0" max="100" name="previous_exam_score" value="{{ result.inputs.previous_exam_score if result and not result.error else 65 }}" required>
+        </div>
+
+        <div class="form-group">
+          <label><i class="fa-solid fa-bed"></i> Sleep Hours / Night</label>
+          <input type="number" step="0.1" min="0" max="12" name="sleep_hours" value="{{ result.inputs.sleep_hours if result and not result.error else 7 }}" required>
+        </div>
+
+        <div class="form-group">
+          <label><i class="fa-solid fa-mobile-screen"></i> Daily Screen Time (hrs)</label>
+          <input type="number" step="0.1" min="0" max="16" name="daily_screen_time" value="{{ result.inputs.daily_screen_time if result and not result.error else 4 }}" required>
+        </div>
+
+        <div class="form-group">
+          <label><i class="fa-solid fa-graduation-cap"></i> Parental Education</label>
+          <select name="parental_education_level" required>
+            <option value="0" {{ 'selected' if result and result.inputs.parental_education_level == 0 }}>High School</option>
+            <option value="1" {{ 'selected' if result and result.inputs.parental_education_level == 1 }}>Diploma</option>
+            <option value="2" {{ 'selected' if (result and result.inputs.parental_education_level == 2) or not result }}>Bachelor's Degree</option>
+            <option value="3" {{ 'selected' if result and result.inputs.parental_education_level == 3 }}>Postgraduate</option>
+          </select>
+        </div>
+
+        <div class="form-group toggle-group">
+          <label><i class="fa-solid fa-futbol"></i> Extracurricular Activities</label>
+          <select name="extracurricular_activities" required>
+            <option value="1" {{ 'selected' if (result and result.inputs.extracurricular_activities == 1) or not result }}>Yes</option>
+            <option value="0" {{ 'selected' if result and result.inputs.extracurricular_activities == 0 }}>No</option>
+          </select>
+        </div>
+
+        <div class="form-group toggle-group">
+          <label><i class="fa-solid fa-wifi"></i> Internet Access</label>
+          <select name="internet_access" required>
+            <option value="1" {{ 'selected' if (result and result.inputs.internet_access == 1) or not result }}>Yes</option>
+            <option value="0" {{ 'selected' if result and result.inputs.internet_access == 0 }}>No</option>
+          </select>
+        </div>
+
+        <div class="form-group toggle-group">
+          <label><i class="fa-solid fa-chalkboard-user"></i> Private Tutoring</label>
+          <select name="tutoring" required>
+            <option value="0" {{ 'selected' if (result and result.inputs.tutoring == 0) or not result }}>No</option>
+            <option value="1" {{ 'selected' if result and result.inputs.tutoring == 1 }}>Yes</option>
+          </select>
+        </div>
+
+        <div class="form-group toggle-group">
+          <label><i class="fa-solid fa-house"></i> Study Environment</label>
+          <select name="study_environment" required>
+            <option value="1" {{ 'selected' if (result and result.inputs.study_environment == 1) or not result }}>Quiet</option>
+            <option value="0" {{ 'selected' if result and result.inputs.study_environment == 0 }}>Noisy</option>
+          </select>
+        </div>
+
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block"><i class="fa-solid fa-bolt"></i> Predict Performance</button>
+    </form>
+
+    <div class="predict-result">
+      {% if result and result.error %}
+        <div class="result-card error-card">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <h3>Something went wrong</h3>
+          <p>{{ result.error }}</p>
+        </div>
+      {% elif result %}
+        <div class="result-card">
+          <div class="score-ring" data-score="{{ result.score }}">
+            <svg viewBox="0 0 120 120">
+              <circle class="ring-bg" cx="60" cy="60" r="52"></circle>
+              <circle class="ring-fg" cx="60" cy="60" r="52" style="--score:{{ result.score }}"></circle>
+            </svg>
+            <div class="ring-label">
+              <span>{{ result.score }}</span>
+              <small>/ 100</small>
+            </div>
+          </div>
+
+          <span class="badge badge-{{ result.badge_color }}">{{ result.category }}</span>
+          <h3 class="pass-fail pass-fail-{{ 'ok' if result.pass_fail == 'Pass' else 'no' }}">
+            <i class="fa-solid {{ 'fa-circle-check' if result.pass_fail == 'Pass' else 'fa-circle-xmark' }}"></i>
+            {{ result.pass_fail }}
+          </h3>
+          <p class="confidence-text">Model confidence: <strong>{{ result.confidence }}%</strong></p>
+
+          <div class="recommendations">
+            <h4><i class="fa-solid fa-lightbulb"></i> Personalized Recommendations</h4>
+            <ul>
+              {% for tip in result.recommendations %}
+              <li>{{ tip }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% else %}
+        <div class="result-card placeholder-card">
+          <i class="fa-solid fa-chart-line"></i>
+          <h3>Your prediction will appear here</h3>
+          <p>Fill in the form and click "Predict Performance" to see the AI's forecast, confidence score, and personalized study recommendations.</p>
+        </div>
+      {% endif %}
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

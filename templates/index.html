@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}EduPredict AI — Home{% endblock %}
+{% block content %}
+
+<section class="hero">
+  <div class="hero-bg-shape"></div>
+  <div class="hero-container">
+    <div class="hero-text">
+      <span class="badge-pill"><i class="fa-solid fa-sparkles"></i> Machine Learning Powered</span>
+      <h1>Predict Student <span class="gradient-text">Academic Performance</span> Before It's Too Late</h1>
+      <p>EduPredict AI uses a trained Random Forest ensemble model to forecast a student's final exam score
+         from behavioral and academic indicators — enabling teachers and institutions to identify at-risk
+         students early and act with data-driven confidence.</p>
+      <div class="hero-buttons">
+        <a href="{{ url_for('predict') }}" class="btn btn-primary"><i class="fa-solid fa-wand-magic-sparkles"></i> Try a Prediction</a>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-outline"><i class="fa-solid fa-chart-line"></i> View Model Dashboard</a>
+      </div>
+      {% if metrics %}
+      <div class="hero-stats">
+        <div><span>{{ (metrics.r2_score * 100)|round(1) }}%</span><small>R&sup2; Accuracy</small></div>
+        <div><span>&plusmn;{{ metrics.mae }}</span><small>Avg. Error (marks)</small></div>
+        <div><span>{{ (metrics.classification_accuracy * 100)|round(1) }}%</span><small>Category Accuracy</small></div>
+      </div>
+      {% endif %}
+    </div>
+    <div class="hero-visual">
+      <div class="floating-card card-1"><i class="fa-solid fa-book-open"></i><p>Study Habits</p></div>
+      <div class="floating-card card-2"><i class="fa-solid fa-chart-simple"></i><p>Attendance</p></div>
+      <div class="floating-card card-3"><i class="fa-solid fa-bed"></i><p>Sleep Cycle</p></div>
+      <div class="orbit-center"><i class="fa-solid fa-graduation-cap"></i></div>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="section-header">
+    <h2>How the System Works</h2>
+    <p>A complete, end-to-end machine learning pipeline built for real academic use.</p>
+  </div>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon icon-blue"><i class="fa-solid fa-database"></i></div>
+      <h3>1. Data Collection</h3>
+      <p>Ten key academic and lifestyle indicators are gathered — study hours, attendance, sleep, tutoring, and more.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon icon-purple"><i class="fa-solid fa-robot"></i></div>
+      <h3>2. AI Prediction</h3>
+      <p>A trained Random Forest Regressor + Classifier ensemble analyzes patterns to forecast the final score.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon icon-green"><i class="fa-solid fa-chart-pie"></i></div>
+      <h3>3. Insight Dashboard</h3>
+      <p>Feature importance, model accuracy and dataset trends are visualized for full transparency.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon icon-orange"><i class="fa-solid fa-lightbulb"></i></div>
+      <h3>4. Smart Recommendations</h3>
+      <p>Personalized, rule-based study tips are generated automatically based on the student's weak areas.</p>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="cta-container">
+    <h2>Ready to see it in action?</h2>
+    <p>Enter a student profile and get an instant AI-powered performance forecast.</p>
+    <a href="{{ url_for('predict') }}" class="btn btn-primary btn-lg"><i class="fa-solid fa-arrow-right"></i> Start Predicting</a>
+  </div>
+</section>
+
+{% endblock %}

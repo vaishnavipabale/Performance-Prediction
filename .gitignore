@@ -1,0 +1,22 @@
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+.env
+.env.*
+.pytest_cache/
+*.log
+.DS_Store
+Thumbs.db
+.ipynb_checkpoints/
+
+# local model artifacts generated during training
+model/*.pkl
+model/*.json
+!model/README.md
+
+# generated data
+# keep source data tracked if you want it in repo; comment this out if needed
+# data/

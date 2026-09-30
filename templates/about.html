@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}About — EduPredict AI{% endblock %}
+{% block content %}
+
+<section class="page-header">
+  <h1><i class="fa-solid fa-circle-info"></i> About This Project</h1>
+  <p>AI-Based Student Performance Prediction System — Final Year Project</p>
+</section>
+
+<section class="about-section">
+  <div class="about-block">
+    <h2><i class="fa-solid fa-bullseye"></i> Objective</h2>
+    <p>This project aims to predict a student's academic performance using machine learning by analyzing
+       behavioral and academic indicators such as study hours, attendance, sleep, and tutoring support.
+       The goal is to enable early intervention for at-risk students and provide data-driven, personalized
+       recommendations.</p>
+  </div>
+
+  <div class="about-block">
+    <h2><i class="fa-solid fa-diagram-project"></i> System Architecture</h2>
+    <ol class="arch-list">
+      <li><strong>Data Layer</strong> — Synthetic dataset of 1,500 student records with 10 behavioral/academic features.</li>
+      <li><strong>Model Layer</strong> — RandomForestRegressor predicts the numeric score; RandomForestClassifier predicts the performance category, both trained with Scikit-learn.</li>
+      <li><strong>Application Layer</strong> — A Flask backend serves predictions through both a web UI and a JSON REST API.</li>
+      <li><strong>Presentation Layer</strong> — A responsive HTML/CSS/JS front-end with live charts (Chart.js) for the model dashboard.</li>
+    </ol>
+  </div>
+
+  <div class="about-block">
+    <h2><i class="fa-solid fa-code"></i> Technology Stack</h2>
+    <div class="tech-grid">
+      <div class="tech-item"><i class="fa-brands fa-python"></i> Python 3</div>
+      <div class="tech-item"><i class="fa-solid fa-flask"></i> Flask</div>
+      <div class="tech-item"><i class="fa-solid fa-robot"></i> Scikit-learn</div>
+      <div class="tech-item"><i class="fa-solid fa-table"></i> Pandas / NumPy</div>
+      <div class="tech-item"><i class="fa-solid fa-chart-simple"></i> Chart.js</div>
+      <div class="tech-item"><i class="fa-brands fa-html5"></i> HTML5 / CSS3</div>
+    </div>
+  </div>
+
+  <div class="about-block">
+    <h2><i class="fa-solid fa-list-check"></i> Input Features Used</h2>
+    <ul class="feature-list">
+      <li>Study Hours per Day</li>
+      <li>Attendance Percentage</li>
+      <li>Previous Exam Score</li>
+      <li>Sleep Hours</li>
+      <li>Extracurricular Activities</li>
+      <li>Internet Access</li>
+      <li>Private Tutoring</li>
+      <li>Parental Education Level</li>
+      <li>Study Environment</li>
+      <li>Daily Screen Time</li>
+    </ul>
+  </div>
+
+  <div class="about-block">
+    <h2><i class="fa-solid fa-triangle-exclamation"></i> Limitations &amp; Future Scope</h2>
+    <p>The current model is trained on synthetic data for demonstration; real-world deployment would require
+       actual institutional data with appropriate privacy safeguards. Future improvements could include deep
+       learning models, integration with live LMS/attendance systems, and time-series tracking of a student's
+       progress across multiple terms.</p>
+  </div>
+</section>
+
+{% endblock %}
