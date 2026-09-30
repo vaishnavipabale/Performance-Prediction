@@ -6,9 +6,9 @@ indicators, built for a final-year academic project.
 
 ## Live Demo
 
-Open the deployed app here:
+[![Live Demo](https://img.shields.io/badge/Live-Demo-00C853?style=for-the-badge&logo=rocket&logoColor=white)](https://performance-prediction-production.up.railway.app)
 
-https://performance-prediction-production.up.railway.app
+Open the deployed app here: https://performance-prediction-production.up.railway.app
 
 ## Features
 
